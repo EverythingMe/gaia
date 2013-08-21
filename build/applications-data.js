@@ -199,6 +199,20 @@ let init = getFile(GAIA_DIR, GAIA_CORE_APP_SRCDIR,
                   'homescreen', 'js', 'init.json');
 writeContent(init, JSON.stringify(content));
 
+// Ev.me data
+content = JSON.parse(getFileContent(getFile(GAIA_DIR, 'build', 'evme.json')));
+
+// Collections can be overrided by third-parties
+customize = JSON.parse(getDistributionFileContent('evme', {}));
+
+if (Array.isArray(customize.collections)) {
+  content.collections = customize.collections;
+}
+
+init = getFile(GAIA_DIR, GAIA_CORE_APP_SRCDIR, 'homescreen', 'everything.me',
+               'config', 'evme.json');
+writeContent(init, JSON.stringify(content));
+
 // SMS
 init = getFile(GAIA_DIR, 'apps', 'sms', 'js', 'blacklist.json');
 content = ['4850', '7000'];

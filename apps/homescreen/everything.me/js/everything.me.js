@@ -4,7 +4,7 @@ var EverythingME = {
     if (footer) {
       footer.style.MozTransition = '-moz-transform .3s ease';
     }
-    
+
     var self = this,
         page = document.getElementById('evmeContainer'),
         gridPage = document.querySelector('#icongrid > div:first-child');
@@ -24,9 +24,9 @@ var EverythingME = {
 
     // add evme into the first grid page
     gridPage.classList.add('evmePage');
-    gridPage.appendChild(page.parentNode.removeChild(page));  
+    gridPage.appendChild(page.parentNode.removeChild(page));
   },
-  
+
   activate: function EverythingME_activate(e) {
     document.body.classList.add('evme-loading');
 
@@ -38,7 +38,7 @@ var EverythingME = {
         js_files = [
           'js/Core.js',
           'js/etmmanager.js',
-
+          'config/config.parser.js',
           'config/config.js',
           'config/shortcuts.js',
           'js/developer/utils.1.3.js',
