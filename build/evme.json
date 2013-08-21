@@ -1,0 +1,5 @@
+{
+  "collections": ["social", "games", "local"],
+  "var_1": "val_1",
+  "var_2": "val_2"
+}
