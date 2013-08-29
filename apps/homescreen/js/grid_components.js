@@ -61,6 +61,7 @@ GridItem.prototype = {
 var Collection = function Collection(params) {
   GridItem.call(this, params);
 
+  this.iconable = false;
   this.type = GridItemsFactory.TYPE.COLLECTION;
   this.isEmpty = params.isEmpty; // only a collection can be empty
   this.hideFromGrid = !!params.hideFromGrid;
