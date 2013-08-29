@@ -924,7 +924,7 @@ var GridManager = (function() {
       var apps = event.target.result;
       apps.forEach(function eachApp(app) {
         delete iconsByManifestURL[app.manifestURL];
-        processApp(app, null, EVME_PAGE);
+        processApp(app, null);
       });
 
       for (var origin in bookmarksByOrigin) {
@@ -935,9 +935,11 @@ var GridManager = (function() {
       for (var manifestURL in iconsByManifestURL) {
         var iconsForApp = iconsByManifestURL[manifestURL];
         for (var entryPoint in iconsForApp) {
-          var icon = iconsForApp[entryPoint];
-          icon.remove();
-          markDirtyState();
+          if (entryPoint) {
+            var icon = iconsForApp[entryPoint];
+            icon.remove();
+            markDirtyState();
+          }
         }
       }
 
@@ -955,7 +957,14 @@ var GridManager = (function() {
       // navigator.mozApps backed app will objects will be handled
       // asynchronously and therefore at a later time.
       var app = null;
-      if (descriptor.type !== GridItemsFactory.TYPE.APP) {
+      if (descriptor.type === GridItemsFactory.TYPE.BOOKMARK ||
+          descriptor.type === GridItemsFactory.TYPE.COLLECTION ||
+          descriptor.role === 'collection') {
+        if (descriptor.manifestURL) {
+          // At build time this property is manifestURL instead of bookmarkURL
+          descriptor.id = descriptor.bookmarkURL = descriptor.manifestURL;
+          descriptor.type = GridItemsFactory.TYPE.COLLECTION;
+        }
         app = GridItemsFactory.create(descriptor);
         bookmarksByOrigin[app.origin] = app;
       }
@@ -1052,7 +1061,8 @@ var GridManager = (function() {
     return descriptor;
   }
 
-  function createOrUpdateIconForApp(app, entryPoint, gridPageOffset, gridPosition) {
+  function createOrUpdateIconForApp(app, entryPoint, gridPageOffset,
+                                    gridPosition) {
     // Make sure we update the icon/label when the app is updated.
     if (app.type !== GridItemsFactory.TYPE.COLLECTION &&
         app.type !== GridItemsFactory.TYPE.BOOKMARK) {
@@ -1241,7 +1251,7 @@ var GridManager = (function() {
       DockManager.init(dockContainer, dock, tapThreshold);
       initApps();
       callback();
-    }, EVME_PAGE);
+    });
   }
 
   return {

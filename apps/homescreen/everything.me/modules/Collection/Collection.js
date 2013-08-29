@@ -87,7 +87,7 @@
 
     this.remove = function removeCollection(id, params) {
       params = params || {};
-      
+
       EvmeManager.removeGridItem({
         "id": id,
         "onConfirm": function onConfirm() {
@@ -373,9 +373,16 @@
         Evme.Storage.set(cacheKey, true);
       });
 
+      var host = document.location.host;
+      var domain = host.replace(/(^[\w\d]+\.)?([\w\d]+\.[a-z]+)/, '$2');
+      var protocol = document.location.protocol;
+
+      var url = protocol + '//homescreen.' + domain + '/';
+
       // create the icon, create the collection, add it to homescreen
       function createPreinstalledCollection(experienceId, icons, position) {
-        var l10nkey = 'id-' + Evme.Utils.shortcutIdToKey(experienceId),
+        var key = Evme.Utils.shortcutIdToKey(experienceId),
+          l10nkey = 'id-' + key,
           query = Evme.Utils.l10n('shortcut', l10nkey);
 
         var apps = Evme.InstalledAppsService.getMatchingApps({
@@ -383,9 +390,8 @@
         });
 
         icons = mergeAppIcons(apps, icons);
-
         var collectionSettings = new Evme.CollectionSettings({
-          id: Evme.Utils.uuid(),
+          id: url + 'collections/' + key + '/manifest.webapp',
           experienceId: experienceId,
           query: query,
           icons: icons,
