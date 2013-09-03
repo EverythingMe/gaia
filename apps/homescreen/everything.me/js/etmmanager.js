@@ -19,8 +19,8 @@ var EvmeManager = (function EvmeManager() {
         "icon": params.icon,
         "iconable": false,
         "useAsyncPanZoom": params.useAsyncPanZoom,
-        "type": !!params.isCollection ? GridItemsFactory.TYPE.COLLECTION :
-                                GridItemsFactory.TYPE.BOOKMARK,
+        "role": !!params.isCollection ? GridItemsFactory.ROLE.COLLECTION :
+                                GridItemsFactory.ROLE.BOOKMARK,
         "isEmpty": !!params.isEmpty
       }, function doAddGridItem(item) {
         GridManager.install(item, params.gridPosition, extra);

@@ -217,8 +217,8 @@ var Homescreen = (function() {
       var confirm = {
         callback: function onAccept() {
           ConfirmDialog.hide();
-          if (app.type === GridItemsFactory.TYPE.COLLECTION ||
-              app.type === GridItemsFactory.TYPE.BOOKMARK) {
+          if (app.role === GridItemsFactory.ROLE.COLLECTION ||
+              app.role === GridItemsFactory.ROLE.BOOKMARK) {
             app.uninstall();
           } else {
             navigator.mozApps.mgmt.uninstall(app);
@@ -233,8 +233,8 @@ var Homescreen = (function() {
       // Show a different prompt if the user is trying to remove
       // a bookmark shortcut instead of an app.
       var manifest = app.manifest || app.updateManifest;
-      if (app.type === GridItemsFactory.TYPE.COLLECTION ||
-          app.type === GridItemsFactory.TYPE.BOOKMARK) {
+      if (app.role === GridItemsFactory.ROLE.COLLECTION ||
+          app.role === GridItemsFactory.ROLE.BOOKMARK) {
         title = _('remove-title-2', { name: manifest.name });
         body = _('remove-body', { name: manifest.name });
         confirm.title = _('remove');

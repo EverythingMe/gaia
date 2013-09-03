@@ -822,7 +822,7 @@ var GridManager = (function() {
       // app.manifest is null until the downloadsuccess/downloadapplied event
       var manifest = app.manifest || app.updateManifest;
 
-      if (app.type === GridItemsFactory.TYPE.COLLECTION ||
+      if (app.role === GridItemsFactory.ROLE.COLLECTION ||
           (suppressHiddenRoles && HIDDEN_ROLES.indexOf(manifest.role) !== -1)) {
         continue;
       }
@@ -851,7 +851,7 @@ var GridManager = (function() {
     var apps = [], app;
     for (var origin in appsByOrigin) {
       app = appsByOrigin[origin];
-      if (app.type === GridItemsFactory.TYPE.COLLECTION) {
+      if (app.role === GridItemsFactory.ROLE.COLLECTION) {
         apps.push(app);
       }
     }
@@ -957,13 +957,11 @@ var GridManager = (function() {
       // navigator.mozApps backed app will objects will be handled
       // asynchronously and therefore at a later time.
       var app = null;
-      if (descriptor.type === GridItemsFactory.TYPE.BOOKMARK ||
-          descriptor.type === GridItemsFactory.TYPE.COLLECTION ||
-          descriptor.role === 'collection') {
+      if (descriptor.role === GridItemsFactory.ROLE.BOOKMARK ||
+          descriptor.role === GridItemsFactory.ROLE.COLLECTION) {
         if (descriptor.manifestURL) {
           // At build time this property is manifestURL instead of bookmarkURL
           descriptor.id = descriptor.bookmarkURL = descriptor.manifestURL;
-          descriptor.type = GridItemsFactory.TYPE.COLLECTION;
         }
         app = GridItemsFactory.create(descriptor);
         bookmarksByOrigin[app.origin] = app;
@@ -1014,7 +1012,7 @@ var GridManager = (function() {
   }
 
   function hasOfflineCache(app) {
-    if (app.type === GridItemsFactory.TYPE.COLLECTION) {
+    if (app.role === GridItemsFactory.ROLE.COLLECTION) {
       return true;
     } else {
       var manifest = app ? app.manifest || app.updateManifest : null;
@@ -1048,13 +1046,13 @@ var GridManager = (function() {
       useAsyncPanZoom: app.useAsyncPanZoom,
       isHosted: isHosted(app),
       hasOfflineCache: hasOfflineCache(app),
-      type: app.type,
+      role: app.role,
       id: app.id,
       isEmpty: !!app.isEmpty
     };
 
-    if (haveLocale && app.type !== GridItemsFactory.TYPE.COLLECTION &&
-                      app.type !== GridItemsFactory.TYPE.BOOKMARK) {
+    if (haveLocale && app.role !== GridItemsFactory.ROLE.COLLECTION &&
+                      app.role !== GridItemsFactory.ROLE.BOOKMARK) {
       descriptor.localizedName = iconsAndNameHolder.name;
     }
 
@@ -1064,8 +1062,8 @@ var GridManager = (function() {
   function createOrUpdateIconForApp(app, entryPoint, gridPageOffset,
                                     gridPosition) {
     // Make sure we update the icon/label when the app is updated.
-    if (app.type !== GridItemsFactory.TYPE.COLLECTION &&
-        app.type !== GridItemsFactory.TYPE.BOOKMARK) {
+    if (app.role !== GridItemsFactory.ROLE.COLLECTION &&
+        app.role !== GridItemsFactory.ROLE.BOOKMARK) {
       app.ondownloadapplied = function ondownloadapplied(event) {
         createOrUpdateIconForApp(event.application, entryPoint);
         app.ondownloadapplied = null;
@@ -1303,7 +1301,7 @@ var GridManager = (function() {
 
       processApp(app, null, null, gridPosition);
 
-      if (app.type === GridItemsFactory.TYPE.COLLECTION) {
+      if (app.role === GridItemsFactory.ROLE.COLLECTION) {
         window.dispatchEvent(new CustomEvent('collectionInstalled', {
           'detail': {
             'collection': app
@@ -1334,8 +1332,8 @@ var GridManager = (function() {
 
       delete appsByOrigin[app.origin];
 
-      if (app.type === GridItemsFactory.TYPE.COLLECTION ||
-          app.type === GridItemsFactory.TYPE.BOOKMARK) {
+      if (app.role === GridItemsFactory.ROLE.COLLECTION ||
+          app.role === GridItemsFactory.ROLE.BOOKMARK) {
         var icon = bookmarkIcons[app.bookmarkURL];
         updateDock = dock.containsIcon(icon);
         icon.remove();
@@ -1353,7 +1351,7 @@ var GridManager = (function() {
         delete appIcons[app.manifestURL];
       }
 
-      if (app.type === GridItemsFactory.TYPE.COLLECTION) {
+      if (app.role === GridItemsFactory.ROLE.COLLECTION) {
         window.dispatchEvent(new CustomEvent('collectionUninstalled', {
           'detail': {
             'collection': app

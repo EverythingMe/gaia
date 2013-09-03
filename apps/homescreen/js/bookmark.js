@@ -3,7 +3,7 @@
 var Bookmark = function Bookmark(params, cb) {
   GridItem.call(this, params);
 
-  this.type = GridItemsFactory.TYPE.BOOKMARK;
+  this.role = GridItemsFactory.ROLE.BOOKMARK;
   cb && cb(this);
 };
 

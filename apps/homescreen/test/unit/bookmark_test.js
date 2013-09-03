@@ -61,7 +61,7 @@ suite('bookmark.js >', function() {
     });
 
     test('All bookmark objects should be defined as bookmarks >', function() {
-      assert.equal(bookmark.type, GridItemsFactory.TYPE.BOOKMARK);
+      assert.equal(bookmark.role, GridItemsFactory.ROLE.BOOKMARK);
     });
 
     test('All bookmark objects are removable >', function() {

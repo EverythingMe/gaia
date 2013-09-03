@@ -1,14 +1,14 @@
 'use strict';
 
 var GridItemsFactory = {
-  TYPE: {
-    APP: 1,
-    BOOKMARK: 2,
-    COLLECTION: 3
+  ROLE: {
+    APP: 'app',
+    BOOKMARK: 'bookmark',
+    COLLECTION: 'collection'
   },
   create: function gif_create(params, cb) {
     var item = Bookmark;
-    if (params.type === GridItemsFactory.TYPE.COLLECTION) {
+    if (params.role === GridItemsFactory.ROLE.COLLECTION) {
       item = Collection;
     }
 
@@ -19,7 +19,7 @@ var GridItemsFactory = {
 var GridItemManifests = {};
 
 var GridItem = function GridItem(params) {
-  this.type = GridItemsFactory.TYPE.APP;
+  this.role = GridItemsFactory.ROLE.APP;
 
   // Grid components are removable by default
   this.removable = true;
@@ -67,7 +67,7 @@ var Collection = function Collection(params, cb) {
   GridItem.call(this, params);
 
   this.iconable = false;
-  this.type = GridItemsFactory.TYPE.COLLECTION;
+  this.role = GridItemsFactory.ROLE.COLLECTION;
   this.isEmpty = params.isEmpty; // only a collection can be empty
   this.hideFromGrid = !!params.hideFromGrid;
 

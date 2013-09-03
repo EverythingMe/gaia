@@ -67,10 +67,10 @@ Icon.prototype = {
   },
 
   isOfflineReady: function icon_isOfflineReady() {
-    return this.descriptor.type === GridItemsFactory.TYPE.COLLECTION ||
+    return this.descriptor.role === GridItemsFactory.ROLE.COLLECTION ||
             !(this.descriptor.isHosted &&
             !this.descriptor.hasOfflineCache ||
-            this.descriptor.type === GridItemsFactory.TYPE.BOOKMARK);
+            this.descriptor.role === GridItemsFactory.ROLE.BOOKMARK);
   },
 
   /*
@@ -108,7 +108,7 @@ Icon.prototype = {
     });
 
     // Collection (as bookmarks)
-    if (descriptor.type === GridItemsFactory.TYPE.COLLECTION) {
+    if (descriptor.role === GridItemsFactory.ROLE.COLLECTION) {
       container.dataset.isCollection = true;
       container.dataset.isEmpty = descriptor.isEmpty;
       container.dataset.collectionId = descriptor.id;
@@ -456,7 +456,7 @@ Icon.prototype = {
    */
   translate: function icon_translate() {
     var descriptor = this.descriptor;
-    if (descriptor.type === GridItemsFactory.TYPE.BOOKMARK)
+    if (descriptor.role === GridItemsFactory.ROLE.BOOKMARK)
       return;
 
     var app = this.app;
@@ -496,7 +496,7 @@ Icon.prototype = {
 
     var draggableElem = this.draggableElem = document.createElement('div');
     draggableElem.className = 'draggable';
-    if (this.descriptor.type !== GridItemsFactory.TYPE.COLLECTION) {
+    if (this.descriptor.role !== GridItemsFactory.ROLE.COLLECTION) {
       // Collections cannot be appended to others so this operation isn't needed
       this.savePostion(draggableElem.dataset);
     }
