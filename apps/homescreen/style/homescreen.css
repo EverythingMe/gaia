@@ -101,6 +101,14 @@ body[data-online = 'offline'] li[data-offline-ready = 'false'] > div > span {
   opacity: 0.3;
 }
 
+/* Collections are disabled while ev.me is loading */
+body:not(.collections-ready) li[data-is-collection = 'true'] > div > img,
+body:not(.collections-ready) li[data-is-collection = 'true'] > div > span {
+  filter: url('app_offline_filter.svg#grayscale');
+  opacity: 0.3;
+  pointer-events: none;
+}
+
 body[data-online = 'offline'] li[data-offline-ready = 'false'] > div > span {
   opacity: 0.5;
 }
