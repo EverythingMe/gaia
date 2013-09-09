@@ -239,6 +239,24 @@ var EvmeManager = (function EvmeManager() {
       });
     }
 
+    function setIconName(id, name) {
+        var icon = GridManager.getApp(id);
+        if (icon) {
+            icon.setCustomName(name);
+        }
+    }
+
+    function getIconName(id) {
+        var out;
+
+        var icon = GridManager.getApp(id);
+        if (icon) {
+            out = icon.getName();
+        }
+
+        return out;
+    }
+
     return {
       addGridItem: addGridItem,
       removeGridItem: removeGridItem,
@@ -265,7 +283,10 @@ var EvmeManager = (function EvmeManager() {
       menuHide: menuHide,
       getMenuHeight: getMenuHeight,
 
-      getIconSize: getIconSize
+      getIconSize: getIconSize,
+
+      getIconName: getIconName,
+      setIconName: setIconName
     };
 }());
 
