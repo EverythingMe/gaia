@@ -40,6 +40,14 @@ section,footer,nav,a,img {
   visibility: hidden;
 }
 
+#paginationBar > progress {
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: absolute;
+  top: 0;
+}
+
 #icongrid {
   width: 100%;
   height: 100%;
