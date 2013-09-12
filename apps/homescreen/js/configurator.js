@@ -26,7 +26,7 @@ var Configurator = (function() {
     if (searchPage) {
       var provider = window[searchPage.provider] || dummyProvider;
       if (searchPage.enabled) {
-	Homescreen.init(0, provider.init.bind(provider));
+        Homescreen.init(0, provider.init.bind(provider));
       } else {
         startHomescreenByDefault();
         setTimeout(provider.destroy, 0);
@@ -119,6 +119,7 @@ var Configurator = (function() {
                  loadSVConfFileSuccess.bind(undefined, mcc_mnc),
                  loadSVConfFileError);
         IccHelper.removeEventListener('iccinfochange', iccHandler);
+        IccHelper = iccHandler = null;
         return true;
       }
       return false;
