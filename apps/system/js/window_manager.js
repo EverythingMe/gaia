@@ -1824,6 +1824,7 @@ var WindowManager = (function() {
         // we need this here and not in other situations
         // as it is expected that homescreen frame is available.
         setTimeout(function() {
+          displayedApp = null;
           setDisplayedApp();
 
           if (callback) {
