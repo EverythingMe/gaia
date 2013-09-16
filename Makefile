@@ -769,6 +769,12 @@ forward:
 	$(ADB) shell killall rilproxy
 	$(ADB) forward tcp:6200 localreserved:rilproxyd
 
+# Kill a specific app
+APP_NAME = $(shell cat *apps/${BUILD_APP_NAME}/manifest.webapp | grep name | head -1 | cut -d '"' -f 4 | cut -b 1-15)
+APP_PID = $(shell adb shell b2g-ps | grep '^${APP_NAME}' | sed 's/^${APP_NAME}\s*//' | awk '{ print $$2 }')
+kill:
+	$(ADB) shell kill ${APP_PID}
+
 # If your gaia/ directory is a sub-directory of the B2G directory, then
 # you should use:
 #
@@ -778,8 +784,6 @@ forward:
 # on your phone, and you have adb in your path, then you can use the
 # install-gaia target to update the gaia files and reboot b2g
 TARGET_FOLDER = webapps/$(BUILD_APP_NAME).$(GAIA_DOMAIN)
-APP_NAME = $(shell cat *apps/${BUILD_APP_NAME}/manifest.webapp | grep name | head -1 | cut -d '"' -f 4 | cut -b 1-15)
-APP_PID = $(shell adb shell b2g-ps | grep '^${APP_NAME}' | sed 's/^${APP_NAME}\s*//' | awk '{ print $$2 }')
 install-gaia: $(PROFILE_FOLDER)
 	$(ADB) start-server
 	@echo 'Stopping b2g'
