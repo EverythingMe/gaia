@@ -30,7 +30,10 @@ var EverythingME = {
     activationIcon.addEventListener('contextmenu', onContextMenu);
     activationIcon.addEventListener('click', triggerActivateFromInput);
     window.addEventListener('collectionlaunch', triggerActivate);
-    window.addEventListener('EvmeDropApp', triggerActivate);
+    window.addEventListener('EvmeDropApp', function(e) {
+      EverythingME.noProgress = true;
+      triggerActivate(e);
+    });
 
     function triggerActivateFromInput(e) {
       document.body.classList.add('evme-loading-from-input');
@@ -46,7 +49,7 @@ var EverythingME = {
       window.removeEventListener('collectionlaunch', triggerActivate);
       window.removeEventListener('EvmeDropApp', triggerActivate);
 
-      // open the collection immediately 
+      // open the collection immediately
       if (e.type === 'collectionlaunch') {
         onCollectionOpened(activationIcon);
       }
@@ -90,7 +93,7 @@ var EverythingME = {
     var elCollection = document.getElementById('collection');
     elCollection.classList.remove('visible');
   },
-  
+
   activate: function EverythingME_activate() {
     document.body.classList.add('evme-loading');
 
@@ -152,16 +155,29 @@ var EverythingME = {
     var scriptLoadCount = 0;
     var cssLoadCount = 0;
 
+    var progressElement = document.querySelector('#paginationBar progress');
+    var total = js_files.length + css_files.length + 1, counter = 0;
+
+    function updateProgress() {
+      progressElement.value = Math.floor(((++counter) / total) * 100);
+      if (counter === total)
+        window.setTimeout(function() {
+          progressElement.parentNode.removeChild(progressElement);
+        });
+    }
+
     function onScriptLoad(event) {
+      updateProgress();
       event.target.removeEventListener('load', onScriptLoad);
-      if (++scriptLoadCount == js_files.length) {
-        EverythingME.start();
+      if (++scriptLoadCount === js_files.length) {
+        EverythingME.start(updateProgress);
       } else {
         loadScript(js_files[scriptLoadCount]);
       }
     }
 
     function onCSSLoad(event) {
+      updateProgress();
       event.target.removeEventListener('load', onCSSLoad);
       if (++cssLoadCount === css_files.length) {
         loadScript(js_files[scriptLoadCount]);
@@ -192,22 +208,28 @@ var EverythingME = {
       }, 0);
     }
 
+    if (!EverythingME.noProgress)
+      progressElement.style.display = 'block';
+    EverythingME.noProgress = null; // No needed anymore
     loadCSS(css_files[0]);
   },
 
-  start: function EverythingME_start() {
+  start: function EverythingME_start(updateProgress) {
     if (document.readyState === 'complete') {
-      EverythingME.initEvme();
+      EverythingME.initEvme(updateProgress);
     } else {
       window.addEventListener('load', function onload() {
         window.removeEventListener('load', onload);
-        EverythingME.initEvme();
+        EverythingME.initEvme(updateProgress);
       });
     }
   },
 
-  initEvme: function EverythingME_initEvme() {
-    Evme.init(EverythingME.onEvmeLoaded);
+  initEvme: function EverythingME_initEvme(updateProgress) {
+    Evme.init(function() {
+      updateProgress();
+      EverythingME.onEvmeLoaded();
+    });
     EvmeFacade = Evme;
   },
 
@@ -221,7 +243,7 @@ var EverythingME = {
         closeButton = document.querySelector('#collection .close');
 
     // add evme into the first grid page
-    gridPage.appendChild(page.parentNode.removeChild(page)); 
+    gridPage.appendChild(page.parentNode.removeChild(page));
 
     EvmeFacade.onShow();
 
@@ -235,7 +257,7 @@ var EverythingME = {
 
       EvmeFacade.Searchbar && EvmeFacade.Searchbar.focus && EvmeFacade.Searchbar.focus();
       evmeInput.setSelectionRange(existingQuery.length, existingQuery.length);
-    }    
+    }
 
     var closeButton  = document.querySelector('#collection .close');
     closeButton.removeEventListener('click', EverythingME.onCollectionClosed);
@@ -304,7 +326,7 @@ var EverythingME = {
       for (var key in AUTOMATIC_KEYS) {
         EverythingME.copyStorageToDB(key, AUTOMATIC_KEYS[key], onDataMigrated);
       }
-      
+
       function onDataMigrated() {
         numberOfKeysDone++;
         if (numberOfKeysDone >= numberOfKeys) {
@@ -314,7 +336,7 @@ var EverythingME = {
       }
     });
   },
-  
+
   copyStorageToDB: function copyStorageToDB(oldKey, newKey, onComplete) {
     if (!onComplete) {
       onComplete = function() {};
@@ -358,7 +380,7 @@ var EverythingME = {
       onComplete(false);
       return false;
     }
-    
+
     function deleteOld() {
       window.localStorage[oldKey] = null;
       delete window.localStorage[oldKey];
