@@ -29,6 +29,13 @@ HomescreenAppBuilder.prototype.setOptions = function(options) {
   this.options = options;
 };
 
+HomescreenAppBuilder.prototype.isAbsoluteURL = function(url) {
+  return url.indexOf('data:') === 0 ||
+         url.indexOf('app://') === 0 ||
+         url.indexOf('http://') === 0 ||
+         url.indexOf('https://') === 0;
+};
+
 // c.f. the corresponding implementation in the Homescreen app.
 HomescreenAppBuilder.prototype.bestMatchingIcon =
   function(preferred_size, manifest, origin) {
@@ -62,14 +69,33 @@ HomescreenAppBuilder.prototype.bestMatchingIcon =
   }
 
   // If the icon path is not an absolute URL, prepend the app's origin.
-  if (url.indexOf('data:') === 0 ||
-      url.indexOf('app://') === 0 ||
-      url.indexOf('http://') === 0 ||
-      url.indexOf('https://') === 0) {
-    return url;
+  if (!this.isAbsoluteURL(url)) {
+    url = origin + url;
   }
 
-  return origin + url;
+  return url;
+};
+
+HomescreenAppBuilder.prototype.bestMatchingBackground =
+  function(manifest, origin) {
+    var backgrounds = manifest.backgrounds;
+    if (!backgrounds) {
+      return undefined;
+    }
+
+    // TODO choose background according to real device height
+    var deviceHeight = "480";
+    var url = backgrounds[deviceHeight];
+
+    if (!url) {
+      return undefined;
+    }
+
+    if (!this.isAbsoluteURL(url)) {
+      url = origin + url;
+    }
+
+    return url;
 };
 
 HomescreenAppBuilder.prototype.getCollectionManifest =
@@ -151,7 +177,13 @@ HomescreenAppBuilder.prototype.getIconDescriptorFromApp =
         apps.push(app);
       }, this);
     }
+
     descriptor.apps = apps;
+
+    let background = this.bestMatchingBackground(manifest, origin);
+    if (background) {
+      descriptor.background = background  ;
+    }
   }
 
   descriptor.manifestURL = manifestURL;

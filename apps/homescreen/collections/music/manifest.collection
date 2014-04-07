@@ -13,5 +13,13 @@
     "90": "/collections/music/icon@1.5x.png",
     "120": "/collections/music/icon@2x.png",
     "135": "/collections/music/icon@2.25x.png"
+  },
+  "backgrounds": {
+    "480": "/collections/music/320x480.png",
+    "800": "/collections/music/480x800.png",
+    "854": "/collections/music/480x854.png",
+    "960": "/collections/music/540x960.png",
+    "1280": "/collections/music/720x1280.png",
+    "1920": "/collections/music/1080x1920.png"
   }
 }

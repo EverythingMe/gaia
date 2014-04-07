@@ -166,12 +166,22 @@ window.Evme = new function Evme_Core() {
   }
 
   function saveCollectionSettings(collection, apps, done) {
-    var collectionSettings = new Evme.CollectionSettings({
+    var settings = {
       'id': collection.id,
       'experienceId': collection.providerId,
       'apps': apps,
       'defaultIcon': collection.getFeatures().icon
-    });
+    };
+
+    var background = collection.manifest.background;
+    if (background) {
+      settings.bg = {
+        'revision': -1,  // default background
+        'data': background
+      }
+    }
+
+    var collectionSettings = new Evme.CollectionSettings(settings);
 
     Evme.CollectionStorage.add(collectionSettings, done);
   }
