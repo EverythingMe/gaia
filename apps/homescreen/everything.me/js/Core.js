@@ -176,7 +176,7 @@ window.Evme = new function Evme_Core() {
     var background = collection.manifest.background;
     if (background) {
       settings.bg = {
-        'revision': -1,  // default background
+        'revision': 'system',  // default background
         'data': background
       }
     }
