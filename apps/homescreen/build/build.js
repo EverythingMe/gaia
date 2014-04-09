@@ -26,6 +26,8 @@ HomescreenAppBuilder.prototype.setOptions = function(options) {
   this.preferredIconSize =
     this.BASE_ICON_SIZE * parseFloat(options.GAIA_DEV_PIXELS_PER_PX);
 
+  this.displayHeight = options.GAIA_DEV_DISPLAY_HEIGHT;
+
   this.options = options;
 };
 
@@ -83,19 +85,15 @@ HomescreenAppBuilder.prototype.bestMatchingBackground =
       return undefined;
     }
 
-    // TODO choose background according to real device height
-    var deviceHeight = "480";
-    var url = backgrounds[deviceHeight];
-
+    var url = backgrounds[this.displayHeight];
     if (!url) {
-      return undefined;
+      throw new Error('invalid background height ' + this.displayHeight +
+        ' for ' + manifest.name + ' (found ' +
+        Object.keys(backgrounds).join(',') + ')\n');
+    } else {
+        url = this.isAbsoluteURL(url) ? url : (origin + url);
+        return url;
     }
-
-    if (!this.isAbsoluteURL(url)) {
-      url = origin + url;
-    }
-
-    return url;
 };
 
 HomescreenAppBuilder.prototype.getCollectionManifest =
