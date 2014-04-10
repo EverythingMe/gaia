@@ -8,7 +8,13 @@
       ["apps/homescreen/collections", "social"],
       ["apps/homescreen/collections", "games"],
       ["apps/homescreen/collections", "music"],
-      ["apps/homescreen/collections", "showbiz"]
+      ["apps/homescreen/collections", "showbiz"],
+      ["apps/homescreen/collections", "funny"],
+      ["apps/homescreen/collections", "local"],
+      ["apps/homescreen/collections", "news"],
+      ["apps/homescreen/collections", "shopping"],
+      ["apps/homescreen/collections", "sports"],
+      ["apps/homescreen/collections", "tv"]
     ], [
       ["apps", "camera"],
       ["apps", "gallery"],
