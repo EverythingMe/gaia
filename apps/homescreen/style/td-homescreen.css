@@ -3,7 +3,7 @@ body #paginationBar {
 }
 
 .apps {
-  z-index: inherit;
+  /*z-index: inherit;*/
 }
 
 .apps > div.td-page {
