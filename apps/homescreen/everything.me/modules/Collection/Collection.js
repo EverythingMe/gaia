@@ -473,7 +473,7 @@ void function() {
       Evme.BackgroundImage.showFullScreen(self.hideFullscreen.bind(self));
 
       window.setTimeout(function onTimeout() {
-        self.fadeImage(0);
+        elAppsContainer.style.opacity = 0;
         el.classList.add(CLASS_WHEN_IMAGE_FULLSCREEN);
       }, 10);
 
@@ -509,10 +509,6 @@ void function() {
       isFullScreenVisible = false;
 
       return true;
-    };
-
-    this.fadeImage = function fadeImage(howMuch) {
-      elAppsContainer.style.opacity = howMuch;
     };
 
     this.getExperience = function getExperience() {
