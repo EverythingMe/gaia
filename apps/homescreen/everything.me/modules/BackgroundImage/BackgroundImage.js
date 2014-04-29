@@ -24,8 +24,8 @@ Evme.BackgroundImage = new function Evme_BackgroundImage() {
     elFullScreenParent = options.elFullScreenParent;
     elStyle = el.style;
 
-  elementsToFade = document.querySelectorAll('*[data-opacity-on-swipe=true]');
-  elementsToFade = Array.prototype.slice.call(elementsToFade, 0);
+    elementsToFade = document.querySelectorAll('*[data-opacity-on-swipe=true]');
+    elementsToFade = Array.prototype.slice.call(elementsToFade, 0);
 
     Evme.EventHandler.trigger(NAME, 'init');
 
@@ -134,6 +134,7 @@ Evme.BackgroundImage = new function Evme_BackgroundImage() {
 
   };
 
+  this._currentFullscreenCallback;
   this.showFullScreen = function showFullScreen(closeCallback) {
     onElementsToFade(function onElement() {
       this.classList.add('animate');
@@ -144,9 +145,20 @@ Evme.BackgroundImage = new function Evme_BackgroundImage() {
       });
     }, 0);
 
-    closeCallback = closeCallback || self.closeFullScreen;
+    self._currentFullscreenCallback = closeCallback || self.closeFullScreen;
 
-    elFullScreen = self.getFullscreenElement(currentImage, closeCallback);
+    elFullScreen = bgImage;
+
+    elFullScreen.querySelector('h2').textContent = currentImage.query || '';
+    elFullScreen.classList.toggle('nosource', !currentImage.source);
+    elFullScreen.classList.toggle('noquery', !currentImage.query);
+
+    elFullScreen.querySelector('.img').style.backgroundImage =
+      'url(' + currentImage.image + ')';
+
+    elFullScreen.querySelector('.source span').textContent =
+      currentImage.source;
+
 
     window.setTimeout(function onTimeout() {
       elFullScreen.classList.add('ontop');
@@ -156,23 +168,6 @@ Evme.BackgroundImage = new function Evme_BackgroundImage() {
     active = true;
 
     cbShowFullScreen();
-  };
-
-  this._currentFullscreenCallback;
-  this.getFullscreenElement = function getFullscreenElement(data, cb) {
-    !data && (data = currentImage);
-
-    var el = bgImage;
-    el.querySelector('.img').style.backgroundImage = 'url(' + data.image + ')';
-    el.querySelector('h2').textContent = data.query || '';
-    el.querySelector('.source span').textContent = data.source;
-
-    el.classList.toggle('nosource', !data.source);
-    el.classList.toggle('noquery', !data.query);
-
-    self._currentFullscreenCallback = cb;
-
-    return el;
   };
 
   this.closeFullScreen = function closeFullScreen(e) {
