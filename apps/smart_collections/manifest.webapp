@@ -1,0 +1,34 @@
+{
+  "name": "Smart Collections",
+  "type": "certified",
+  "role": "smartcollections",
+  "description": "Smart Collections",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "The Gaia Team",
+    "url": "https://github.com/mozilla-b2g/gaia"
+  },
+  "locales": {
+    "en-US": {
+      "name": "Smart Collections",
+      "description": "Smart Collections"
+    }
+  },
+  "default_locale": "en-US",
+  "icons": {
+    "128": "/style/icons/Blank.png"
+  },
+  "permissions": {
+    "geolocation": {}
+    "mobileconnection":{},
+    "storage":{},
+    "systemXHR":{},
+    "webapps-manage":{},
+  },
+  "datastores-access": {
+    "bookmarks_store": {
+      "readonly": true,
+      "description": "Display bookmarks in Smart Collections"
+    }
+  }
+}
