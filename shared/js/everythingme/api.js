@@ -1,6 +1,7 @@
+'use strict';
+/* global eme, Promise */
+
 (function() {
-  'use strict';
-  /* global eme, Promise */
 
   function partnersAPI(eme) {
     /*jshint validthis:true */
@@ -16,6 +17,7 @@
 
       this.Apps = Apps();
       this.Search = Search();
+      this.Categories = Categories();
     };
 
     function Apps() {
@@ -50,6 +52,18 @@
       return {
         suggestions: suggestions,
         bgimage: bgimage
+      };
+    }
+
+    function Categories() {
+      var service = 'Categories';
+
+      function list(options) {
+        return apiRequest(service, 'list', options);
+      }
+
+      return {
+        list: list
       };
     }
 

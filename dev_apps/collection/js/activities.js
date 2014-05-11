@@ -1,22 +1,46 @@
 'use strict';
 
-(function() {
+(function(eme) {
+
+  eme.init();
 
   var Activities = {
     'create-collection': function(activity) {
-      alert('Creating collection!');
+      var suggestions = document.querySelector('#suggestions');
 
-      // Build and save a fake collection object
-      var collection = {
-        id: Date.now() + '',
-        name: 'Folder ' + (Date.now() + '').substr(10)
-      };
+      eme.api.Categories.list().then(function success(response) {
 
-      CollectionsDatabase.add(collection).then(done, done);
+        var frag = document.createDocumentFragment();
+        response.response.categories.forEach(function (cat) {
+          var li = document.createElement('li');
+          li.textContent = cat.query + ' [' + cat.categoryId + ']';
+          frag.appendChild(li);
+          li.addEventListener('click', select.bind(li));
+        });
 
-      function done() {
-        activity.postResult(true);
-      }
+        suggestions.appendChild(frag);
+
+        function select() {
+          this.removeEventListener('click', select);
+
+          // Build and save a fake collection object
+          var collection = {
+            id: Date.now() + '',
+            name: this.textContent
+          };
+
+          CollectionsDatabase.add(collection).then(done, done);
+
+          function done() {
+            activity.postResult(true);
+          }
+        }
+
+      }, function error() {
+        alert('create-collection: error');
+      }).catch(function fail() {
+        alert('create-collection: failed');
+      });
     },
 
     'update-collection': function(activity) {
@@ -39,4 +63,4 @@
     Activities[name](activity);
   });
 
-}());
+}(window.eme));
