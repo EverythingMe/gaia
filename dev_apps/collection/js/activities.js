@@ -87,6 +87,21 @@
         alert('view-collection fail');
       });
 
+      eme.api.Search.bgimage({categoryId: categoryId}).then(
+        function success(response) {
+          var
+          image = response.response.image,
+          src = 'data:' + image.MIMEType + ';base64,' + image.data;
+
+          elements.bgimage.src = src;
+
+        }, function error() {
+          alert('bgimage fail')
+        })
+      .catch(function fail() {
+        alert('bgimage fail')
+      });
+
       document.getElementById('close').addEventListener('click', function() {
         activity.postResult(true);
       });

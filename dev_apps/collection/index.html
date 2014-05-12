@@ -30,23 +30,45 @@
 
     <link rel="resource" type="application/l10n" href="locales/locales.ini">
 
+    <style>
+      #bgimage {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1;
+      }
+
+      #content {
+        position: relative;
+        z-index: 2;
+      }
+    </style>
   </head>
   <body>
-    <H1>COLLECTION TEST PAGE</H1>
-    <span id="close"></span>
+    <img id="bgimage"></img>
 
-    <button id="create-collection">Create</button>
-    <button id="view-collection">View</button>
+    <div id="content">
+      <H1>COLLECTION TEST PAGE</H1>
+      <span id="close"></span>
 
-    <ul id="suggestions"></ul>
+      <button id="create-collection">Create</button>
+      <button id="view-collection">View 'Games'</button>
+      <button id="clear">Clear</button>
 
-    <ul id="icons"></ul>
+      <ul id="suggestions"></ul>
+
+      <div id="icons"></div>
+    </div>
 
     <script>
-      function reset() {
-        document.getElementById('suggestions').innerHTML = '';
-        document.getElementById('icons').innerHTML = '';
-      }
+      document.getElementById('clear').addEventListener('click',
+        function () {
+          document.getElementById('suggestions').innerHTML = '';
+          document.getElementById('icons').innerHTML = '';
+          document.getElementById('bgimage').src = '.';
+        });
 
       document.getElementById('create-collection').addEventListener('click',
         function() {
@@ -63,13 +85,6 @@
           };
 
           Activities['view-collection'](activity);
-        });
-      Array.prototype.forEach.call(document.getElementsByTagName('button'),
-        function each(button) {
-          button.addEventListener('click', function run() {
-            reset();
-            window.Activities[this.id]();
-          });
         });
     </script>
   </body>
