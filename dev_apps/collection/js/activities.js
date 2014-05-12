@@ -1,7 +1,8 @@
 'use strict';
 
-(function(eme) {
+(function(exports) {
 
+  var eme = exports.eme;
   eme.init();
 
   var elements = {
@@ -104,4 +105,6 @@
     Activities[name](activity);
   });
 
-}(window.eme));
+  exports.Activities = Activities;
+
+}(window));
