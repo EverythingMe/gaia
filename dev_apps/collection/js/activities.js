@@ -1,4 +1,5 @@
 'use strict';
+/* global Bookmark */
 
 (function(exports) {
 
@@ -6,8 +7,8 @@
   eme.init();
 
   var elements = {
-    suggestions: document.getElementById('suggestions'),
-    results: document.getElementById('results')
+    bgimage: document.getElementById('bgimage'),
+    suggestions: document.getElementById('suggestions')
   }
 
   var Activities = {
@@ -63,36 +64,28 @@
 
     'view-collection': function(activity) {
       var categoryId = activity.source.categoryId;
-      var frag = document.createDocumentFragment();
 
       eme.api.Apps.search({categoryId: categoryId}).then(
         function success(response) {
-          response.response.apps.forEach(function each(app) {
-            var
-            li = document.createElement('li'),
-            img = document.createElement('img');
+          response.response.apps.forEach(function each(webapp) {
+            var bookmark = new Bookmark({
+              id: webapp.id, // e.me app id (int)
+              name: webapp.name,
+              url: webapp.appUrl,
+              icon: webapp.icon
+            });
 
-            img.src = app.icon;
-
-            li.className = 'app-result';
-            li.textContent = app.name;
-            li.addEventListener('click', launch.bind(app));
-            li.appendChild(img);
-
-            frag.appendChild(li);
+            app.addItem(bookmark);
           });
 
-          elements.results.appendChild(frag);
+          app.render();
         },
         function error(){
           alert('view-collection error');
-        }).catch(function fail() {
-          alert('view-collection fail');
-        });
-
-      function launch() {
-        window.open(this.appUrl);
-      }
+        })
+      .catch(function fail() {
+        alert('view-collection fail');
+      });
 
       document.getElementById('close').addEventListener('click', function() {
         activity.postResult(true);
