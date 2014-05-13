@@ -2,6 +2,7 @@
 /* global eme */
 
 (function() {
+  var DEBUG = true;
 
   // see duplicate in homescreen/everything.me.js
   function generateDeviceId() {
@@ -15,6 +16,13 @@
 
   window.eme = {
     api: null,
+    log: function log() {
+      if (DEBUG) {
+        var args = Array.prototype.slice.apply(arguments);
+        args.unshift('evme');
+        console.log.apply(console, args);
+      }
+    },
 
     /**
      * Get or create deviceId and init search/eme instance.

@@ -1,9 +1,9 @@
 'use strict';
-/* global eme, Promise */
+/* global Promise */
 
-(function() {
+(function(eme) {
 
-  function partnersAPI(eme) {
+  function partnersAPI() {
     /*jshint validthis:true */
 
     var OK = 1;
@@ -89,6 +89,8 @@
           payload += k + '=' + encodeURIComponent(options[k]) + '&';
         }
       }
+
+      eme.log('API request:', url + '?' + payload);
 
       var httpRequest;
       var promise = new Promise(function done(resolve, reject) {

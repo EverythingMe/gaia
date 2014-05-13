@@ -6,13 +6,9 @@
   var eme = exports.eme;
   eme.init();
 
-  var elements = {
-    bgimage: document.getElementById('bgimage'),
-    suggestions: document.getElementById('suggestions')
-  }
-
   var Activities = {
     'create-collection': function(activity) {
+      var suggestions = document.getElementById('suggestions');
 
       eme.api.Categories.list().then(function success(response) {
         var frag = document.createDocumentFragment();
@@ -27,7 +23,7 @@
           frag.appendChild(li);
         });
 
-        elements.suggestions.appendChild(frag);
+        suggestions.appendChild(frag);
 
         function select() {
           this.removeEventListener('click', select);
@@ -47,9 +43,11 @@
           }
         }
 
-      }, function error() {
+      }, function error(e) {
+        eme.log('create-collection: error', e);
         alert('create-collection: error');
-      }).catch(function fail() {
+      }).catch(function fail(ex) {
+        eme.log('create-collection: failed', ex);
         alert('create-collection: failed');
       });
     },
@@ -63,7 +61,10 @@
     },
 
     'view-collection': function(activity) {
-      var categoryId = activity.source.categoryId;
+      try {
+      var
+      bgimage = document.getElementById('bgimage'),
+      categoryId = activity.source.categoryId;
 
       eme.api.Apps.search({categoryId: categoryId}).then(
         function success(response) {
@@ -80,31 +81,38 @@
 
           app.render();
         },
-        function error(){
-          alert('view-collection error');
+        function error(e){
+          alert('view-collection error', e);
         })
-      .catch(function fail() {
+      .catch(function fail(ex) {
+        eme.log('evme', ex);
         alert('view-collection fail');
       });
 
       eme.api.Search.bgimage({categoryId: categoryId}).then(
         function success(response) {
+          eme.log('evme', 'response', JSON.stringify(response));
           var
           image = response.response.image,
           src = 'data:' + image.MIMEType + ';base64,' + image.data;
 
-          elements.bgimage.src = src;
+          bgimage.src = src;
 
         }, function error() {
           alert('bgimage fail')
         })
-      .catch(function fail() {
-        alert('bgimage fail')
+      .catch(function fail(ex) {
+        eme.log('evme', ex);
+        alert('bgimage fail', ex);
       });
 
       document.getElementById('close').addEventListener('click', function() {
         activity.postResult(true);
       });
+    }
+    catch(ex) {
+      eme.log('evme', ex);
+    }
     },
   };
 
