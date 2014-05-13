@@ -1,23 +1,26 @@
-document.getElementById('clear').addEventListener('click',
-  function () {
-    document.getElementById('suggestions').innerHTML = '';
-    document.getElementById('icons').innerHTML = '';
-    document.getElementById('bgimage').src = '.';
-  });
+(function() {
+  var activity = {
+    source: {
+      categoryId: 207 // games
+    },
+    postResult: function() {},
+    postError: function() {}
+  };
 
-document.getElementById('create-collection').addEventListener('click',
-  function() {
-    Activities['create-collection']();
-  });
+  document.getElementById('clear').addEventListener('click',
+    function () {
+      document.getElementById('suggestions').innerHTML = '';
+      document.getElementById('icons').innerHTML = '';
+      document.getElementById('bgimage').src = '.';
+    });
 
-document.getElementById('view-collection').addEventListener('click',
-  function() {
-    var activity = {
-      source: {
-        postResult: function() {},
-        categoryId: 207 // games
-      }
-    };
+  document.getElementById('create-collection').addEventListener('click',
+    function() {
+      Activities['create-collection'](activity);
+    });
 
-    Activities['view-collection'](activity);
-  });
+  document.getElementById('view-collection').addEventListener('click',
+    function() {
+      Activities['view-collection'](activity);
+    });
+})();

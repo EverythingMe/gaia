@@ -8,47 +8,40 @@
 
   var Activities = {
     'create-collection': function(activity) {
-      var suggestions = document.getElementById('suggestions');
 
-      eme.api.Categories.list().then(function success(response) {
-        var frag = document.createDocumentFragment();
-        response.response.categories.forEach(function each(suggestion) {
-          var li = document.createElement('li');
+      eme.api.Categories.list().then(
+        function success(response) {
+          if (response.response.categories.length) {
+            var showSuggestions = Suggestions.load(response.response.categories);
+            showSuggestions.then(
+              function select(category) {
+                // Build and save a fake collection object
+                var collection = {
+                  // I think home2 should generate the id @kevingrandon
+                  id: Date.now() + '',
+                  name: this.dataset.query,
+                  categoryId: this.dataset.categoryId
+                };
 
-          li.textContent = suggestion.query;
-          li.dataset.query = suggestion.query;
-          li.dataset.categoryId =suggestion.categoryId;
-          li.addEventListener('click', select.bind(li));
+                CollectionsDatabase.add(collection).then(done, done);
 
-          frag.appendChild(li);
-        });
-
-        suggestions.appendChild(frag);
-
-        function select() {
-          this.removeEventListener('click', select);
-
-          // Build and save a fake collection object
-          var collection = {
-            // I think home2 should generate the id @kevingrandon
-            id: Date.now() + '',
-            name: this.dataset.query,
-            categoryId: this.dataset.categoryId
-          };
-
-          CollectionsDatabase.add(collection).then(done, done);
-
-          function done() {
-            activity.postResult(true);
+                function done() {
+                  activity.postResult(true);
+                }
+              }, function cancel() {
+                activity.postResult(false);
+              });
+          } else {
+            // TODO
+            activity.postError('no more suggestions');
           }
-        }
 
       }, function error(e) {
         eme.log('create-collection: error', e);
-        alert('create-collection: error');
+        activity.postError();
       }).catch(function fail(ex) {
         eme.log('create-collection: failed', ex);
-        alert('create-collection: failed');
+        activity.postError();
       });
     },
 
@@ -61,58 +54,44 @@
     },
 
     'view-collection': function(activity) {
-      try {
       var
-      bgimage = document.getElementById('bgimage'),
-      categoryId = activity.source.categoryId;
+      categoryId = activity.source.categoryId,
+      requests = [
+        eme.api.Apps.search({categoryId: categoryId}),
+        eme.api.Search.bgimage({categoryId: categoryId})
+      ];
 
-      eme.api.Apps.search({categoryId: categoryId}).then(
-        function success(response) {
-          response.response.apps.forEach(function each(webapp) {
-            var bookmark = new Bookmark({
+      Promise.all(requests).then(
+        function success(responseArr) {
+          var
+          searchResponse = responseArr[0],
+          bgResponse = responseArr[1],
+          image = bgResponse.response.image,
+          src = 'data:' + image.MIMEType + ';base64,' + image.data,
+          webapps = searchResponse.response.apps.map(function each(webapp) {
+            return {
               id: webapp.id, // e.me app id (int)
               name: webapp.name,
               url: webapp.appUrl,
               icon: webapp.icon
-            });
-
-            app.addItem(bookmark);
+            };
           });
 
-          app.render();
+          activity.postResult({
+            webapps: searchResponse.response.apps,
+            imageSrc: src
+          });
         },
-        function error(e){
+        function error(e) {
+          eme.log(e);
           alert('view-collection error', e);
+          activity.postError(e);
         })
-      .catch(function fail(ex) {
-        eme.log('evme', ex);
-        alert('view-collection fail');
+      .catch(function fail(e) {
+        eme.log(e);
+        alert('view-collection fail', e);
+        activity.postError(e);
       });
-
-      eme.api.Search.bgimage({categoryId: categoryId}).then(
-        function success(response) {
-          eme.log('evme', 'response', JSON.stringify(response));
-          var
-          image = response.response.image,
-          src = 'data:' + image.MIMEType + ';base64,' + image.data;
-
-          bgimage.src = src;
-
-        }, function error() {
-          alert('bgimage fail')
-        })
-      .catch(function fail(ex) {
-        eme.log('evme', ex);
-        alert('bgimage fail', ex);
-      });
-
-      document.getElementById('close').addEventListener('click', function() {
-        activity.postResult(true);
-      });
-    }
-    catch(ex) {
-      eme.log('evme', ex);
-    }
     },
   };
 
