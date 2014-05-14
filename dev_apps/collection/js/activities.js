@@ -1,34 +1,61 @@
 'use strict';
-/* global Bookmark */
+/* global Promise */
 
 (function(exports) {
 
   var eme = exports.eme;
   eme.init();
 
+  function buildCollections(categoryIds, responseData) {
+    var
+    icons = responseData.icons,
+    categories = responseData.categories.filter(function _filter(cat) {
+      return categoryIds.indexOf(cat.categoryId) > -1;
+    });
+
+
+    // add 'id' and 'icons' properties
+    for (var i = 0, iLen = categories.length; i < iLen; i++) {
+      var cat = categories[i];
+
+      // I think home2 should generate the id @kevingrandon
+      cat.id = Date.now() + '';
+
+      cat.name = cat.query;
+
+      cat.icons = cat.appIds.map(function getIcon(iconId) {
+        return responseData.icons[iconId];
+      });
+    }
+
+    return categories;
+  }
+
   var Activities = {
     'create-collection': function(activity) {
 
       eme.api.Categories.list().then(
         function success(response) {
-          if (response.response.categories.length) {
-            var showSuggestions = Suggestions.load(response.response.categories);
-            showSuggestions.then(
-              function select(category) {
-                // Build and save a fake collection object
-                var collection = {
-                  // I think home2 should generate the id @kevingrandon
-                  id: Date.now() + '',
-                  name: this.dataset.query,
-                  categoryId: this.dataset.categoryId
-                };
+          var data = response.response;
+          if (data.categories.length) {
+            var suggest = Suggestions.load(data.categories, data.locale);
+            suggest.then(
+              function select(categoryIds) {
+                eme.log('resolved with', categoryIds);
 
-                CollectionsDatabase.add(collection).then(done, done);
+                var
+                collections = buildCollections(categoryIds, data),
+                trxs = collections.map(CollectionsDatabase.add);
+
+                // TODO
+                // store a batch of collections at once. possible?
+                Promise.all(trxs).then(done, done);
 
                 function done() {
                   activity.postResult(true);
                 }
-              }, function cancel() {
+              }, function cancel(reason) {
+                eme.log('rejected with', reason);
                 activity.postResult(false);
               });
           } else {

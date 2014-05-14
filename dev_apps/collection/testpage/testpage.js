@@ -9,7 +9,7 @@
 
   document.getElementById('clear').addEventListener('click',
     function () {
-      document.getElementById('suggestions').innerHTML = '';
+      document.getElementById('collections-select').innerHTML = '';
       document.getElementById('icons').innerHTML = '';
       document.getElementById('bgimage').src = '.';
     });
