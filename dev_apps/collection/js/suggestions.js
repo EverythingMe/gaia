@@ -110,7 +110,6 @@
     },
     hide: function suggestions_hide() {
       this.el.blur();
-      this.el.style.display = 'none';
     }
   };
 

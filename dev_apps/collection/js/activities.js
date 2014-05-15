@@ -8,9 +8,20 @@
 
   var Activities = {
     'create-collection': function(activity) {
+      var
+      request,
+      loading = document.getElementById('loading'),
+      cancel = document.getElementById('cancel');
 
-      eme.api.Categories.list().then(
+      cancel.addEventListener('click', function() {
+        request.abort();
+        activity.postResult(false);
+      });
+
+      request = eme.api.Categories.list().then(
         function success(response) {
+          loading.style.display = 'none';
+
           var data = response.response;
           if (data.categories.length) {
             var suggest = Suggestions.load(data.categories, data.locale);
