@@ -6,31 +6,6 @@
   var eme = exports.eme;
   eme.init();
 
-  function buildCollections(categoryIds, responseData) {
-    var
-    icons = responseData.icons,
-    categories = responseData.categories.filter(function _filter(cat) {
-      return categoryIds.indexOf(cat.categoryId) > -1;
-    });
-
-
-    // add 'id' and 'icons' properties
-    for (var i = 0, iLen = categories.length; i < iLen; i++) {
-      var cat = categories[i];
-
-      // I think home2 should generate the id @kevingrandon
-      cat.id = Date.now() + '';
-
-      cat.name = cat.query;
-
-      cat.icons = cat.appIds.map(function getIcon(iconId) {
-        return responseData.icons[iconId];
-      });
-    }
-
-    return categories;
-  }
-
   var Activities = {
     'create-collection': function(activity) {
 
@@ -40,16 +15,24 @@
           if (data.categories.length) {
             var suggest = Suggestions.load(data.categories, data.locale);
             suggest.then(
-              function select(categoryIds) {
-                eme.log('resolved with', categoryIds);
+              function select(selected) {
+                eme.log('resolved with', selected);
 
-                var
-                collections = buildCollections(categoryIds, data),
-                trxs = collections.map(CollectionsDatabase.add);
+                if (Array.isArray(selected)) {
+                  // collections from categories
+                  var
+                  collections =
+                    CategoryCollection.prototype.fromResponse(selected, data),
+                  trxs = collections.map(CollectionsDatabase.add);
 
-                // TODO
-                // store a batch of collections at once. possible?
-                Promise.all(trxs).then(done, done);
+                  // TODO
+                  // store a batch of collections at once. possible?
+                  Promise.all(trxs).then(done, done);
+                } else {
+                  // collection from custom query
+                  var collection = new QueryCollection({query: selected});
+                  CollectionsDatabase.add(collection).then(done, done);
+                }
 
                 function done() {
                   activity.postResult(true);
