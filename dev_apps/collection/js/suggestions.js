@@ -5,7 +5,9 @@
 (function(exports) {
 
   var
+  _ = navigator.mozL10n.get,
   _map = Array.prototype.map,
+
   CUSTOM = 'custom',
   WORLDWIDE_LOCALE = 'en_WW';
 
@@ -15,7 +17,6 @@
   // - offline message when no collection list in cache and device is offline
   // - translate collections names when device language changes (requires server
   //   side changes)
-  // - l10n keys
   //
 
   function Suggestions(categories) {
@@ -37,8 +38,7 @@
         custom = document.createElement('option');
         custom.value = CUSTOM;
 
-        // TODO l10n
-        custom.textContent = 'l10n-custom';
+        custom.textContent = _('custom');
         frag.appendChild(custom);
 
         if (doTranslate) {
@@ -87,8 +87,7 @@
           if (value === CUSTOM) {
             this.hide();
 
-            // TODO l10n
-            var query = window.prompt('prompt-create-custom');
+            var query = window.prompt(_('prompt-create-custom'));
             if (query) {
               this.resolve(query);
             } else {
