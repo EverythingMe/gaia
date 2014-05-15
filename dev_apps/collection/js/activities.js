@@ -3,7 +3,10 @@
 
 (function(exports) {
 
-  var eme = exports.eme;
+  var
+  _ = navigator.mozL10n.get,
+  eme = exports.eme;
+
   eme.init();
 
   var Activities = {
@@ -54,12 +57,14 @@
               });
           } else {
             // TODO
-            activity.postError('no more suggestions');
+            // send existing collections
+            // handle 'no more suggestions'
           }
 
-      }, function error(e) {
-        eme.log('create-collection: error', e);
-        activity.postError();
+      }, function error(resaon) {
+        eme.log('create-collection: error', reason);
+        activity.postError(_(resaon === 'network error' ?
+                                   'network-error-message' : undefined));
       }).catch(function fail(ex) {
         eme.log('create-collection: failed', ex);
         activity.postError();
