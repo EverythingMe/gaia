@@ -8,7 +8,6 @@
   _ = navigator.mozL10n.get,
   _map = Array.prototype.map,
 
-  CUSTOM = 'custom',
   WORLDWIDE_LOCALE = 'en_WW';
 
   // TODO
@@ -36,7 +35,7 @@
         doTranslate = locale !== WORLDWIDE_LOCALE,
         frag = document.createDocumentFragment(),
         custom = document.createElement('option');
-        custom.value = CUSTOM;
+        custom.value = 'custom';
 
         custom.textContent = _('custom');
         frag.appendChild(custom);
@@ -67,24 +66,29 @@
 
   Suggestions.prototype = {
     handleEvent: function suggestions_evnethandler(e) {
-      var value = this.el.value;
+      var customSelected =
+        this.el.querySelectorAll('option[value="custom"]:checked').length;
 
       switch (e.type) {
         case 'blur':
           this.hide();
-          var selected = _map.call(this.el.querySelectorAll('option:checked'),
-            function getId(opt) {
-              return parseInt(opt.dataset.categoryId);
-            });
 
-          if (selected.length) {
-            this.resolve(selected);
-          } else {
-            this.reject('cancelled');
+          if (!customSelected) {
+            var selected = _map.call(this.el.querySelectorAll('option:checked'),
+              function getId(opt) {
+                return parseInt(opt.dataset.categoryId);
+              });
+
+            if (selected.length) {
+              this.resolve(selected);
+            } else {
+              this.reject('cancelled');
+            }
           }
           break;
+
         case 'change':
-          if (value === CUSTOM) {
+          if (customSelected) {
             this.hide();
 
             var query = window.prompt(_('prompt-create-custom'));
