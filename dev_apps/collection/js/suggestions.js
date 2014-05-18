@@ -27,9 +27,11 @@
     this.hide();
 
     this.load = function suggestions_load(categories, locale) {
+      var self = this;
+
       this.clear();
 
-      var promise = new Promise(function done(resolve, reject) {
+      return new Promise(function done(resolve, reject) {
         this.resolve = resolve;
         this.reject = reject;
 
@@ -48,21 +50,28 @@
           // translate and sort categories
         }
 
-        categories.forEach(function each(category) {
-          var el = document.createElement('option');
+        // filter installed categories
+        CollectionsDatabase.getAllCategories()
+          .then(function filter(installed) {
+            categories.forEach(function each(category) {
+              if (installed.indexOf(category.categoryId) > -1) {
+                return;
+              }
 
-          el.value = el.textContent = category.query;
-          el.dataset.query = category.query;
-          el.dataset.categoryId = category.categoryId;
+              var el = document.createElement('option');
 
-          frag.appendChild(el);
-        });
+              el.value = el.textContent = category.query;
+              el.dataset.query = category.query;
+              el.dataset.categoryId = category.categoryId;
 
-        this.el.appendChild(frag);
-        this.show();
+              frag.appendChild(el);
+            });
+
+            self.el.appendChild(frag);
+            self.show();
+
+          }, reject);
       }.bind(this));
-
-      return promise;
     }
   };
 

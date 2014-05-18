@@ -17,7 +17,10 @@
       cancel = document.getElementById('cancel');
 
       cancel.addEventListener('click', function() {
-        request.abort();
+        // TODO request should always have an 'abort' method
+        // but sometimes it doesn't. find out why!
+        // "TypeError: request.abort is not a function" {file: "app://collection.gaiamobile.org/js/activities.js" line: 20}
+        request.abort && request.abort();
         activity.postResult(false);
       });
 

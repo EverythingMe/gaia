@@ -2,13 +2,13 @@
 
 (function(exports){
   function BaseCollection(props) {
-    this.id = new Date() + '';
+    this.id = props.id || null;
     this.name = props.name;
   }
 
   function CategoryCollection(props) {
     BaseCollection.call(this, props);
-    this.category = props.category;
+    this.categoryId = props.categoryId;
     this.icons = props.icons;
   }
 
@@ -29,7 +29,7 @@
           cat = categories[i],
           collection = new CategoryCollection({
             name: cat.query,
-            category: cat.categoryId,
+            categoryId: cat.categoryId,
             icons: cat.appIds.map(getIcon)
           });
 
