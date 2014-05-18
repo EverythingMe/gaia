@@ -147,8 +147,7 @@
           };
           activity.onerror = function onerror(e) {
             // TODO show error dialog?
-            console.log('create-collection error',
-                this.error.name || 'generic-error-message');
+            alert(this.error.name || 'generic-error-message');
           };
           break;
 

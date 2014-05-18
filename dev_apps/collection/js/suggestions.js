@@ -11,9 +11,6 @@
   WORLDWIDE_LOCALE = 'en_WW';
 
   // TODO
-  // - send existing collections
-  // - no more suggestions
-  // - Offline message
   // - cache the suggestions response (to be used when device is offline)
   // - offline message when no collection list in cache and device is offline
   // - translate collections names when device language changes (requires server

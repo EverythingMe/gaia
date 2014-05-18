@@ -29,44 +29,39 @@
           loading.style.display = 'none';
 
           var data = response.response;
-          if (data.categories.length) {
-            var suggest = Suggestions.load(data.categories, data.locale);
-            suggest.then(
-              function select(selected) {
-                eme.log('resolved with', selected);
+          var suggest = Suggestions.load(data.categories, data.locale);
+          suggest.then(
+            function select(selected) {
+              eme.log('resolved with', selected);
 
-                if (Array.isArray(selected)) {
-                  // collections from categories
-                  var
-                  collections =
-                    CategoryCollection.prototype.fromResponse(selected, data),
-                  trxs = collections.map(CollectionsDatabase.add);
+              if (Array.isArray(selected)) {
+                // collections from categories
+                var
+                collections =
+                  CategoryCollection.prototype.fromResponse(selected, data),
+                trxs = collections.map(CollectionsDatabase.add);
 
-                  // TODO
-                  // store a batch of collections at once. possible?
-                  Promise.all(trxs).then(done, done);
-                } else {
-                  // collection from custom query
-                  var collection = new QueryCollection({query: selected});
-                  CollectionsDatabase.add(collection).then(done, done);
-                }
+                // TODO
+                // store a batch of collections at once. possible?
+                Promise.all(trxs).then(done, done);
+              } else {
+                // collection from custom query
+                var collection = new QueryCollection({query: selected});
+                CollectionsDatabase.add(collection).then(done, done);
+              }
 
-                function done() {
-                  activity.postResult(true);
-                }
-              }, function cancel(reason) {
-                eme.log('rejected with', reason);
-                activity.postResult(false);
-              });
-          } else {
-            // TODO
-            // send existing collections
-            // handle 'no more suggestions'
-          }
+              function done() {
+                activity.postResult(true);
+              }
+            },
+            function cancel(reason) {
+              eme.log('rejected with', reason);
+              activity.postResult(false);
+            });
 
-      }, function error(resaon) {
+      }, function error(reason) {
         eme.log('create-collection: error', reason);
-        activity.postError(_(resaon === 'network error' ?
+        activity.postError(_(reason === 'network error' ?
                                    'network-error-message' : undefined));
       }).catch(function fail(ex) {
         eme.log('create-collection: failed', ex);
