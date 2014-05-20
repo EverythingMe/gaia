@@ -15,6 +15,8 @@
     window.addEventListener('appzoom', this);
     window.addEventListener('gaiagrid-saveitems', this);
     window.addEventListener('contextmenu', this);
+    window.addEventListener('gaiagrid-collection-open', this);
+    window.addEventListener('gaiagrid-collection-close', this);
   }
 
   App.prototype = {
@@ -46,6 +48,7 @@
      * General event handler.
      */
     handleEvent: function(e) {
+      var self = this;
       switch(e.type) {
         case 'gaiagrid-saveitems':
           this.itemStore.save(this.grid.getItems());
@@ -59,19 +62,34 @@
               type: 'folder'
             }
           });
+
+          this.homescreenFocused = false;
+
           activity.onsuccess = function onsuccess() {
-            // TODO
-            // do something with this.result?
+            self.homescreenFocused = true;
           };
           activity.onerror = function onerror(e) {
             // TODO show error dialog?
+            self.homescreenFocused = true;
             alert(this.error.name || 'generic-error-message');
           };
+          break;
+
+        case 'gaiagrid-collection-open':
+          this.homescreenFocused = false;
+          break;
+
+        case 'gaiagrid-collection-close':
+          this.homescreenFocused = true;
           break;
 
         case 'hashchange':
           if (this.grid._grid.dragdrop.inEditMode) {
             this.grid._grid.dragdrop.exitEditMode();
+            return;
+          }
+
+          if (!this.homescreenFocused) {
             return;
           }
 
