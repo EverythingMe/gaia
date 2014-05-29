@@ -10,11 +10,10 @@
     "135": "/collections/shopping/icon@2.25x.png"
   },
   "backgrounds": {
-    "480": "/collections/shopping/320x480.png",
-    "800": "/collections/shopping/480x800.png",
-    "854": "/collections/shopping/480x854.png",
-    "960": "/collections/shopping/540x960.png",
-    "1280": "/collections/shopping/720x1280.png",
-    "1920": "/collections/shopping/1080x1920.png"
+    "480": "/collections/shopping/background_320x480.jpg",
+    "800": "/collections/shopping/background_480x800.jpg",
+    "854": "/collections/shopping/background_480x854.jpg",
+    "960": "/collections/shopping/background_540x960.jpg",
+    "1280": "/collections/shopping/background_720x1280.jpg"
   }
 }

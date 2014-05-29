@@ -10,11 +10,10 @@
     "135": "/collections/sports/icon@2.25x.png"
   },
   "backgrounds": {
-    "480": "/collections/sports/320x480.png",
-    "800": "/collections/sports/480x800.png",
-    "854": "/collections/sports/480x854.png",
-    "960": "/collections/sports/540x960.png",
-    "1280": "/collections/sports/720x1280.png",
-    "1920": "/collections/sports/1080x1920.png"
+    "480": "/collections/sports/background_320x480.jpg",
+    "800": "/collections/sports/background_480x800.jpg",
+    "854": "/collections/sports/background_480x854.jpg",
+    "960": "/collections/sports/background_540x960.jpg",
+    "1280": "/collections/sports/background_720x1280.jpg"
   }
 }

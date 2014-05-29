@@ -13,11 +13,10 @@
     "135": "/collections/funny/icon@2.25x.png"
   },
   "backgrounds": {
-    "480": "/collections/funny/320x480.png",
-    "800": "/collections/funny/480x800.png",
-    "854": "/collections/funny/480x854.png",
-    "960": "/collections/funny/540x960.png",
-    "1280": "/collections/funny/720x1280.png",
-    "1920": "/collections/funny/1080x1920.png"
+    "480": "/collections/funny/background_320x480.jpg",
+    "800": "/collections/funny/background_480x800.jpg",
+    "854": "/collections/funny/background_480x854.jpg",
+    "960": "/collections/funny/background_540x960.jpg",
+    "1280": "/collections/funny/background_720x1280.jpg"
   }
 }

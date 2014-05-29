@@ -10,11 +10,10 @@
     "135": "/collections/news/icon@2.25x.png"
   },
   "backgrounds": {
-    "480": "/collections/news/320x480.png",
-    "800": "/collections/news/480x800.png",
-    "854": "/collections/news/480x854.png",
-    "960": "/collections/news/540x960.png",
-    "1280": "/collections/news/720x1280.png",
-    "1920": "/collections/news/1080x1920.png"
+    "480": "/collections/news/background_320x480.jpg",
+    "800": "/collections/news/background_480x800.jpg",
+    "854": "/collections/news/background_480x854.jpg",
+    "960": "/collections/news/background_540x960.jpg",
+    "1280": "/collections/news/background_720x1280.jpg"
   }
 }

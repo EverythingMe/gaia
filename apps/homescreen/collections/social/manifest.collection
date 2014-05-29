@@ -16,11 +16,10 @@
     "135": "/collections/social/icon@2.25x.png"
   },
   "backgrounds": {
-    "480": "/collections/social/320x480.png",
-    "800": "/collections/social/480x800.png",
-    "854": "/collections/social/480x854.png",
-    "960": "/collections/social/540x960.png",
-    "1280": "/collections/social/720x1280.png",
-    "1920": "/collections/social/1080x1920.png"
+    "480": "/collections/social/background_320x480.jpg",
+    "800": "/collections/social/background_480x800.jpg",
+    "854": "/collections/social/background_480x854.jpg",
+    "960": "/collections/social/background_540x960.jpg",
+    "1280": "/collections/social/background_720x1280.jpg"
   }
 }

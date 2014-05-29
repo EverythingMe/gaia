@@ -11,11 +11,10 @@
     "135": "/collections/games/icon@2.25x.png"
   },
   "backgrounds": {
-    "480": "/collections/games/320x480.png",
-    "800": "/collections/games/480x800.png",
-    "854": "/collections/games/480x854.png",
-    "960": "/collections/games/540x960.png",
-    "1280": "/collections/games/720x1280.png",
-    "1920": "/collections/games/1080x1920.png"
+    "480": "/collections/games/background_320x480.jpg",
+    "800": "/collections/games/background_480x800.jpg",
+    "854": "/collections/games/background_480x854.jpg",
+    "960": "/collections/games/background_540x960.jpg",
+    "1280": "/collections/games/background_720x1280.jpg"
   }
 }
