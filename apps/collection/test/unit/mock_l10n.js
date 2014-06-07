@@ -1,17 +1,21 @@
+(function(exports) {
+
 'use strict';
 /* exported MockL10n */
 
-var MockL10n = {
+var values = {};
 
+var MockL10n = {
   language: {
     code: 'en-US'
   },
 
   get: function get(key, params) {
-    if (params) {
-      key += JSON.stringify(params);
-    }
-    return key;
+    return values[key];
+  },
+
+  set: function set(key ,value) {
+    values[key] = value;
   },
 
   localize: function localize(element, key, params) {
@@ -35,3 +39,7 @@ var MockL10n = {
     callback();
   }
 };
+
+exports.MockL10n = MockL10n;
+
+}(window));
