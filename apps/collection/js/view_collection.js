@@ -1,8 +1,8 @@
 'use strict';
 /* global BaseCollection */
 /* global Contextmenu */
-/* global RequestWebResults */
-/* global RequestBGImage */
+/* global ViewWebResults */
+/* global ViewBackground */
 /* global Promise */
 
 (function(exports) {
@@ -38,17 +38,18 @@
                                           : ('query: ' + query));
 
     // render web results
-    new RequestWebResults(
+    new ViewWebResults(
       activity.source.data.name, {
       categoryId: categoryId,
-      query: query
+      query: query,
+      iconFormat: 20
     }).then(function(results) {
       collection.webResults = results;
       collection.render(grid);
     });
 
     // get bg image
-    new RequestBGImage({
+    new ViewBackground({
       categoryId: categoryId,
       query: query
     }).then(function(image) {
