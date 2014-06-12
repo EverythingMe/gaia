@@ -20,6 +20,8 @@
 
     var collection = BaseCollection.create(activity.source.data);
     collection.render(grid);
+    collection.name = Math.round(Math.random()*199);
+    collection.save();
 
     /* jshint -W031 */
     new Contextmenu(collection);
