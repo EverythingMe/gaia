@@ -94,6 +94,7 @@
           this.deviceId = deviceId;
           this.deviceName = settings['deviceinfo.product_model'];
           this.osVersion = settings['deviceinfo.os'];
+          this.apiUrl = settings['partners.api.url'];
 
           resolve();
         }.bind(this);

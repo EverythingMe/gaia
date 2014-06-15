@@ -5,8 +5,6 @@
 
   const OK = 1;
   const NETWORK_ERROR = 'network error';
-
-  const API_URL = 'https://api.everything.me/partners/1.0/{resource}/';
   const API_KEY = '79011a035b40ef3d7baeabc8f85b862f';
 
   var device = eme.device;
@@ -48,7 +46,7 @@
    */
   function Request(service, method, options) {
     var resource = service + '/' + method;
-    var url = API_URL.replace('{resource}', resource);
+    var url = device.apiUrl.replace('{resource}', resource);
     var payload = '';
 
     options = options ? options : {};
@@ -73,7 +71,7 @@
 
     var httpRequest;
     var promise = new Promise(function done(resolve, reject) {
-      httpRequest = new XMLHttpRequest();
+      httpRequest = new XMLHttpRequest({mozSystem: true});
       httpRequest.open('POST', url, true);
       httpRequest.setRequestHeader(
         'Content-Type', 'application/x-www-form-urlencoded');
