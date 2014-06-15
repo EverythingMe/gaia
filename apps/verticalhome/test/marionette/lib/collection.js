@@ -17,7 +17,7 @@ Collection.URL = 'app://collection.gaiamobile.org';
 Collection.Selectors = {
   contextMenuTarget: '#icons',
   menuAddButton: '#create-smart-collection',
-  systemSelectConfirm: '#select-options-buttons button.value-option-confirm'
+  collectionsSelect: '#collections-select'
 };
 
 Collection.prototype = {
@@ -38,18 +38,27 @@ Collection.prototype = {
    * Selects a collection by positions in the list.
    * @return {Array} An array of item names.
    */
-  selectNew: function() {
-    var allNames = [];
-    for (var i = 0, iLen = arguments.length; i < iLen; i++) {
-      var index = arguments[i];
-      var listItem = this.client.helper.waitForElement(
-        '#select-option-popup ol li[data-option-index="' + index + '"]');
-      allNames.push(listItem.text());
-      listItem.click();
+  selectNew: function(names) {
+    this.client.switchToFrame();
+    this.client.apps.switchToApp(Collection.URL);
+
+    var selectors = Collection.Selectors;
+    var select = this.client.helper.waitForElement(
+      selectors.collectionsSelect);
+
+    // XXX: System dialog does not appear for select boxes for some reason in
+    // activites. For now we simply manually select everything and fire a blur
+    // event which the code looks for to submit the form. There is no UI in the
+    // test because of this, but everything seems to work.
+    for (var i = 0, iLen = names.length; i < iLen; i++) {
+      var name = names[i];
+      this.client.helper.tapSelectOption(select, name);
     }
-    this.client.helper.waitForElement(Collection.Selectors.systemSelectConfirm)
-        .click();
-    return allNames;
+
+    select.scriptWith(function(el) {
+      el.dispatchEvent(new CustomEvent('blur'));
+    });
+    this.client.switchToFrame();
   },
 
   /**

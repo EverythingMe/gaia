@@ -53,8 +53,12 @@ marionette('Vertical - Collection', function() {
 
   test('create collections', function() {
     collection.enterCreateScreen();
-    client.switchToFrame();
-    var names = collection.selectNew(1, 2, 3);
+    var names = [
+      'Around Me',
+      'Astrology',
+      'Autos'
+    ];
+    collection.selectNew(names);
     client.apps.switchToApp(Home2.URL);
 
     // Verify that all collections were created.
