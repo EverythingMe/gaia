@@ -10,7 +10,7 @@
 (function(exports){
 
   // web result created from E.me API data
-  function WebResult(data) {
+  function WebResult(data, gridItemFeatures) {
     // use appUrl as the webresult identifier because:
     // 1. data.id is null for bing results
     // 2. using appUrl allows deduping vs bookmarks
@@ -22,7 +22,8 @@
     return {
       identifier: data.appUrl,
       type: 'webResult',
-      data: data
+      data: data,
+      features: gridItemFeatures
     };
   }
 
@@ -127,7 +128,10 @@
 
     addWebResults: function addWebResult(arrayOfData) {
       var results = arrayOfData.map(function each(data) {
-        return new WebResult(data);
+        return new WebResult(data, {
+          isDraggable: false,
+          isRemovable: false
+        });
       });
       this.webResults = results;
     },
@@ -162,7 +166,7 @@
         if (item.type === 'homeIcon') {
           icon = this.homeIcons.get(item.identifier);
         } else if (item.type === 'webResult') {
-          icon = new GaiaGrid.Bookmark(item.data);
+          icon = new GaiaGrid.Bookmark(item.data, item.features);
         }
 
         if (icon) {

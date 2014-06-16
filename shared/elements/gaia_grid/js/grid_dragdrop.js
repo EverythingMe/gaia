@@ -205,7 +205,7 @@
         var item = this.gridView.items[i];
 
         // Do not consider dividers for dragdrop.
-        if (item.detail.type === 'divider') {
+        if (!item.isDraggable()) {
           continue;
         }
 

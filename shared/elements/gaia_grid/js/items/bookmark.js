@@ -61,10 +61,17 @@
     },
 
     /**
-     * Bookmarks are always removable.
+     * Bookmarks are always removable unless noted otherwise in features.
      */
     isRemovable: function() {
-      return true;
+      return this.features.isRemovable !== false;
+    },
+
+    /**
+     * Bookmarks are always draggable unless noted otherwise in features.
+     */
+    isDraggable: function() {
+      return this.features.isDraggable !== false;
     },
 
     /**

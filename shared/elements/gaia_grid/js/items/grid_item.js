@@ -129,6 +129,13 @@
     },
 
     /**
+     * Returns true if this item is draggable.
+     */
+    isDraggable: function() {
+      return true;
+    },
+
+    /**
      * Returns true if the icon is hosted at an origin.
      */
     isIconFromOrigin: function() {
@@ -308,6 +315,7 @@
         var tile = document.createElement('div');
         tile.className = 'icon';
         tile.dataset.identifier = this.identifier;
+        tile.dataset.isDraggable = this.isDraggable();
         tile.setAttribute('role', 'link');
 
         // This <p> has been added in order to place the title with respect
