@@ -46,7 +46,7 @@
    */
   function Request(service, method, options) {
     var resource = service + '/' + method;
-    var url = device.apiUrl.replace('{resource}', resource);
+    var url = eme.config.apiUrl.replace('{resource}', resource);
     var payload = '';
 
     options = options ? options : {};
