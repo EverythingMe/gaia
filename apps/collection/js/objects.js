@@ -153,6 +153,21 @@
       return !this.isPinned(item);
     },
 
+    setPinned: function setPinned(identifiers) {
+      // reflect the new sorting on this.pinned
+      this.pinned = identifiers
+        // array of all grid items, cut down to pinned only
+        .slice(0, this.pinned.length)
+        .map(function(identifier) {
+          // find index of item in this.pinned
+          var idx = this.pinnedIdentifiers.indexOf(identifier);
+          // return the item
+          return this.pinned[idx];
+        }.bind(this));
+      this.save();
+      console.log('pinned new sort saved', this.pinnedIdentifiers);
+    },
+
     get pinnedIdentifiers() {
       return this.pinned.map(function each(item) {
         return item.identifier;

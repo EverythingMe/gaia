@@ -11,7 +11,7 @@
     this.collection = collection;
 
     window.addEventListener('hashchange', this);
-    window.addEventListener('gaiagrid-editmode-end', this);
+    window.addEventListener('gaiagrid-dragdrop-finish', this);
     window.addEventListener('gaiagrid-uninstall-mozapp', this);
     window.addEventListener('collection-remove-webresult', this);
 
@@ -38,12 +38,13 @@
 
     handleEvent: function(e) {
       switch(e.type) {
-        case 'gaiagrid-editmode-end':
+        case 'gaiagrid-dragdrop-finish':
           // save new sorting
-          console.log(grid.getItems());
-
-          // render collection with webResults
-          // this.collection.render(grid);
+          var items = elements.grid.getItems();
+          var identifiers = items.map(function(item) {
+            return item.element.dataset.identifier;
+          });
+          this.collection.setPinned(identifiers);
           break;
 
         // home button or "done" clicked
