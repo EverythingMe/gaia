@@ -126,6 +126,15 @@
       this.pin(new WebResult(data));
     },
 
+    unpin: function unpin(identifier) {
+      var idx = this.pinnedIdentifiers.indexOf(identifier);
+      if (idx !== -1) {
+        this.pinned.splice(idx, 1);
+        eme.log('removed pinned item', identifier);
+        return this.save();
+      }
+    },
+
     addWebResults: function addWebResult(arrayOfData) {
       var results = arrayOfData.map(function each(data) {
         return new WebResult(data, {
@@ -150,6 +159,14 @@
       });
     },
 
+    removeBookmark: function removeBookmark(identifier) {
+      window.dispatchEvent(
+        new CustomEvent('collection-remove-webresult', {
+          detail: { identifier: identifier }
+        })
+      );
+    },
+
     addToGrid: function addToGrid(items, grid) {
       // Add a dedupeId to each result
       items.forEach(function eachResult(item) {
@@ -167,6 +184,11 @@
           icon = this.homeIcons.get(item.identifier);
         } else if (item.type === 'webResult') {
           icon = new GaiaGrid.Bookmark(item.data, item.features);
+
+          // override remove method (original sends activity)
+          if (icon.isRemovable) {
+            icon.remove = () => this.removeBookmark(item.identifier);
+          }
         }
 
         if (icon) {

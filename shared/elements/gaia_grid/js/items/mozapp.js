@@ -10,9 +10,10 @@
   /**
    * Represents  single app icon on the homepage.
    */
-  function Mozapp(app, entryPoint, details) {
+  function Mozapp(app, entryPoint, details, features) {
     this.app = app;
     this.entryPoint = entryPoint;
+    this.features = features || {};
 
     this.detail = {
       type: 'app',
@@ -136,7 +137,7 @@
      * Returns true if this app is removable.
      */
     isRemovable: function() {
-      return this.app.removable;
+      return this.features.isRemovable !== false || this.app.removable;
     },
 
     fetchIconBlob: function() {

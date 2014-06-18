@@ -12,6 +12,8 @@
 
     window.addEventListener('hashchange', this);
     window.addEventListener('gaiagrid-editmode-end', this);
+    window.addEventListener('gaiagrid-uninstall-mozapp', this);
+    window.addEventListener('collection-remove-webresult', this);
 
     elements.done.addEventListener('click', this.exitEditMode);
   }
@@ -27,9 +29,14 @@
       window.dispatchEvent(new CustomEvent('hashchange'));
     },
 
-    handleEvent: function(e) {
-      var grid = elements.grid;
+    unpin: function(itemId) {
+      var collection = this.collection;
+      // unpin, then refresh grid
+      collection.unpin(itemId)
+        .then(() => collection.render(elements.grid));
+    },
 
+    handleEvent: function(e) {
       switch(e.type) {
         case 'gaiagrid-editmode-end':
           // save new sorting
@@ -39,12 +46,21 @@
           // this.collection.render(grid);
           break;
 
+        // home button or "done" clicked
         case 'hashchange':
-          // home button or "done" clicked
-          if (grid._grid.dragdrop.inEditMode) {
-            grid._grid.dragdrop.exitEditMode();
+          var dragdrop = elements.grid._grid.dragdrop;
+          if (dragdrop.inEditMode) {
+            dragdrop.exitEditMode();
             return;
           }
+          break;
+
+        case 'gaiagrid-uninstall-mozapp':
+          this.unpin(e.detail.detail.manifestURL);
+          break;
+
+        case 'collection-remove-webresult':
+          this.unpin(e.detail.identifier);
           break;
       }
     }
