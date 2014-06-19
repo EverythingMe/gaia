@@ -19,6 +19,8 @@
 
     // render pinned apps first
     collection.render(grid);
+    collection.name = Math.round(Math.random()*199);
+    collection.save();
 
     eme.init().then(function() {
       loading(false);
