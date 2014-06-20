@@ -114,6 +114,16 @@
       }
     },
 
+    unpin: function unpin(identifier) {
+      var i = this.pinnedIdentifiers.indexOf(identifier);
+      if (i > -1) {
+        this.pinnedIdentifiers.splice(i, 1);
+        this.save();
+        eme.log(identifier, 'unpinned from', this.name);
+
+      }
+    },
+
     pinHomeIcons: function pinHomeIcons(identifiers) {
       var items = identifiers.map(function each(identifier) {
         return new PinnedHomeIcon(identifier);
