@@ -50,6 +50,10 @@
     // {src: string, source: string, checksum: string}
     this.background = props.background || {};
 
+    // save copy of original properties so we can tell when to re-render the
+    // collection icon
+    this.originalProps = props;
+
     if (window.SearchDedupe) {
       this.dedupe = new SearchDedupe();
     }
@@ -82,6 +86,14 @@
 
     // returns a promise resolved when the db trx is done
     save: function save() {
+      if (this.iconDirty) {
+        return this.renderIcon().then(this.put.bind(this));
+      } else {
+        return this.put();
+      }
+    },
+
+    put: function put() {
       return CollectionsDatabase.put({
         id: this.id,
         name: this.name,
@@ -196,6 +208,34 @@
         this.icon = canvas.toDataURL();
         return this.icon;
       }.bind(this));
+    },
+
+    // we should re-render the collection icon if:
+    // 1. first 3 apps changed
+    // 2. background changed
+    get iconDirty() {
+      var should = false;
+      var numAppIcons = 3; // TODO get from collection_icon.js
+      var before = this.originalProps;
+
+      try {
+        // background
+        should = before.background.src !== this.background.src;
+
+        // apps
+        var first = this.pinned.concat(this.webResults).slice(0, numAppIcons);
+        var wereFirst =
+          before.pinned.concat(before.webResults).slice(0, numAppIcons);
+
+        for (var i = 0; i < numAppIcons; i++) {
+          if (first[i].identifier !== wereFirst[i].identifier) {
+            should = true;
+            break;
+          }
+        }
+      } catch (e) {
+        return should;
+      }
     }
   };
 
