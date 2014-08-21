@@ -6,8 +6,9 @@
 
   const mozSettings = navigator.mozSettings;
 
-  const DEBUG = true;
   const API_URL = 'https://api.everything.me/partners/1.0/{resource}/';
+
+  var DEBUG = false;
 
   var initPromise = null;
   var slice = Function.call.bind(Array.prototype.slice);
@@ -22,6 +23,7 @@
       .then(
         function success(settings) {
           // config overrides
+          DEBUG = settings['everythingme.flags.debug'];
           if (settings['everythingme.api.url']) {
             this.config.apiUrl = settings['everythingme.api.url'];
           }
