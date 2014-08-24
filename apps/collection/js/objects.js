@@ -91,9 +91,14 @@
     },
 
     get localizedName() {
-      // l10n prefix taken from /shared/locales/collection_categories
-      var l10nId = 'collection-categoryId-' + this.categoryId;
-      return navigator.mozL10n.get(l10nId) || this.name;
+      var name = this.name;
+      if (name && name.toLowerCase() !== this.cName) {
+        return name;
+      } else {
+        // l10n prefix taken from /shared/locales/collection_categories
+        var l10nId = 'collection-categoryId-' + this.categoryId;
+        return navigator.mozL10n.get(l10nId) || name;
+      }
     },
 
     // get a fresh copy of editable properties from db

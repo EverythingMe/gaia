@@ -53,8 +53,13 @@
     gridWidth: 1,
 
     get name() {
-      // first attempt to use the localized name
-      return _(l10nKey + this.detail.categoryId) || this.detail.name;
+      var name = this.detail.name;
+      if (name && name.toLowerCase() !== this.detail.cName) {
+        return name;
+      } else {
+        // first attempt to use the localized name
+        return _(l10nKey + this.detail.categoryId) || name;
+      }
     },
 
     /**
@@ -76,6 +81,7 @@
       GaiaGrid.GridItem.prototype.render.call(this, coordinates, index);
       if (setClassName) {
         this.element.classList.add('collection');
+        this.isEditable() && this.element.classList.add('editable');
       }
     },
 

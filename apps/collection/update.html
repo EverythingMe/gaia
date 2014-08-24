@@ -5,13 +5,47 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
 
     <script defer src="shared/js/l10n.js"></script>
+    <script type="text/javascript" defer src="shared/js/font_size_utils.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="shared/style/buttons.css">
+    <link rel="stylesheet" type="text/css" href="shared/style/headers.css">
+    <link rel="stylesheet" type="text/css" href="shared/style/input_areas.css">
+
+    <link rel="stylesheet" href="style/css/base.css">
+    <link rel="stylesheet" href="style/css/update.css">
+
     <script defer src="shared/js/collections_database.js"></script>
 
+    <script defer src="shared/js/everythingme/eme.js"></script>
+
+    <script defer src="js/common.js"></script>
+    <script defer src="js/objects.js"></script>
+
+    <script defer src="js/update_collection.js"></script>
     <script defer src="js/activities.js"></script>
 
     <link rel="resource" type="application/l10n" href="locales/locales.ini">
   </head>
   <body>
-    View a smart collection.
+    <section role="region" class="skin-organic">
+      <header>
+        <button id="cancel-button" type="button">
+          <span class="icon icon-close" data-l10n-id="cancel"></span>
+        </button>
+        <menu type="toolbar">
+          <button id="done-button" disabled type="button" role="menuitem" data-l10n-id="done"></button>
+        </menu>
+        <h1 data-l10n-id="edit-collection-header"></h1>
+      </header>
+
+      <form>
+        <label data-l10n-id="collection-name">
+          <p>
+            <input type="text" id="collection-title" dir="auto"></input>
+            <button id="collection-title-clear" type="reset">Clear</button>
+          </p>
+        </label>
+      </form>
+    </section>
   </body>
 </html>
