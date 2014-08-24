@@ -11,7 +11,7 @@ var CollectionEditor = {
 
     this.collectionTitle = document.getElementById('collection-title');
     this.collectionTitle.value = this.data.name || '';
-    
+
     this.cancelButton = document.getElementById('cancel-button');
     this.cancelButton.addEventListener('click', this.close.bind(this));
 
@@ -21,7 +21,7 @@ var CollectionEditor = {
 
     this.form = document.querySelector('form');
     this.form.addEventListener('input', this._checkDoneButton.bind(this));
-    
+
     this.clearButton = document.getElementById('collection-title-clear');
     this.clearButton.addEventListener('touchstart',
                                        this._clearTitle.bind(this));
@@ -52,8 +52,8 @@ var CollectionEditor = {
 
   save: function() {
     this.saveButton.removeEventListener('click', this.saveListener);
-    this.data.name = this.collectionTitle.value;
+    var name = this.collectionTitle.value;
     var collection = BaseCollection.create(this.data);
-    collection.write().then(() => this.onsaved());
+    collection.rename(name).then(() => this.onsaved());
   }
 };

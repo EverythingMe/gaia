@@ -20,14 +20,8 @@
     // Prepend them to the list after we're done rendering.
     var asyncItems = [];
 
-    var options = {
-      limit: 24
-    };
-    if (collection.categoryId) {
-      options.categoryId = collection.categoryId;
-    } else {
-      options.query = collection.query;
-    }
+    var options = collection.searchOptions;
+    options.limit = 24;
 
     loading();
 

@@ -110,6 +110,20 @@
       }.bind(this));
     },
 
+    rename: function rename(name) {
+      // after renaming a collection it can no longer be a CategoryCollection
+      // so we clear the category properties
+      this.cName = this.categoryId = null;
+
+      // same as a custom query collection
+      this.name = this.query = name;
+
+      // clear icon assets and call 'save' to trigger rendering new icon
+      this.webicons = [];
+      this.background = {};
+      return this.save();
+    },
+
     /**
      * Updates the CollectionsDatabase record with the current data.
      * If we need to re-render an icon, we do so before saving.
@@ -440,6 +454,12 @@
     // in vertical-home-next (bug 1024336) we will only support canonicalName
     // save it to make the future migration easier
     this.cName = props.cName;
+
+    Object.defineProperty(this, 'searchOptions', {
+      get: function() {
+        return  {categoryId: this.categoryId};
+      }
+    });
   }
 
   CategoryCollection.prototype = {
@@ -477,6 +497,12 @@
   function QueryCollection(props) {
     BaseCollection.call(this, props);
     this.name = this.query = props.query;
+
+    Object.defineProperty(this, 'searchOptions', {
+      get: function() {
+        return {query: this.query};
+      }
+    });
   }
 
   QueryCollection.prototype = {

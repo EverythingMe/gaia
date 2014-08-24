@@ -94,17 +94,9 @@
     getEmeBackground: function getEmeBackground(collection, size) {
       var checksum;
 
-      var options = {
-        width: size || undefined,
-        height: size || undefined
-      };
-
-      if (collection.categoryId) {
-        options.categoryId = collection.categoryId;
-      }
-      else {
-        options.query = collection.query;
-      }
+      var options = collection.searchOptions;
+      options.width = size || undefined;
+      options.height = size || undefined;
 
       if (collection.background) {
         checksum = collection.background.checksum;
@@ -159,10 +151,7 @@
     },
 
     getWebIcons: function getWebIcons(collection) {
-      var options =
-        (collection.categoryId) ? {categoryId: collection.categoryId} :
-                                  {query: collection.query};
-
+      var options = collection.searchOptions;
       options.limit = APPS_IN_ICON;
 
       return eme.api.Apps.search(options).then(response => {
